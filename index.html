@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <title>كل سنة وانت طيبة يا قمراية 🎉</title>
+  <style>
+    body {
+      background: linear-gradient(to bottom right, #ffccdd, #ffe6f0);
+      font-family: 'Cairo', sans-serif;
+      text-align: center;
+      padding: 30px;
+    }
+
+    h1 {
+      color: #d10068;
+      font-size: 2.5rem;
+    }
+
+    p {
+      font-size: 1.3rem;
+      color: #444;
+      margin-bottom: 20px;
+    }
+
+    #score, #timer {
+      font-size: 1.2rem;
+      margin: 10px;
+      color: #d10068;
+      font-weight: bold;
+    }
+
+    .game-container {
+      display: grid;
+      grid-template-columns: repeat(3, 100px);
+      gap: 20px;
+      justify-content: center;
+    }
+
+    .hole {
+      width: 100px;
+      height: 100px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      position: relative;
+      cursor: pointer;
+      overflow: hidden;
+    }
+
+    .face {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 10px;
+      display: none;
+      transition: 0.3s;
+    }
+
+    .face.show {
+      display: block;
+    }
+
+    #end-screen {
+      display: none;
+      font-size: 1.5rem;
+      color: #d10068;
+      margin-top: 30px;
+    }
+
+    footer {
+      margin-top: 40px;
+      font-size: 1rem;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🎂 عيد ميلاد سعيد يا قمراية 🎂</h1>
+<p>اضغطي على وشك قبل ما يختفي بسرعة! 😆</p>
+
+<div id="score">السكور: 0</div>
+<div id="timer">الوقت: 30</div>
+<div class="game-container" id="game"></div>
+
+<div id="end-screen"></div>
+
+<footer>اي لاف يو موزتي ❤️</footer>
+
+<script>
+  const images = [
+    './Screenshot 2025-05-24 005537.png',
+    './Screenshot 2025-05-24 005649.png',
+    './Screenshot 2025-05-24 005720.png',
+    './Screenshot 2025-05-24 005802.png',
+    
+  ]; // ضيف أو شيل زي ما تحب
+
+  const gameContainer = document.getElementById('game');
+  const scoreDisplay = document.getElementById('score');
+  const timerDisplay = document.getElementById('timer');
+  const endScreen = document.getElementById('end-screen');
+
+  let score = 0;
+  let timeLeft = 30;
+  let gameActive = true;
+
+  function randomImage() {
+    return images[Math.floor(Math.random() * images.length)];
+  }
+
+  function createHole() {
+    const hole = document.createElement('div');
+    hole.classList.add('hole');
+
+    const face = document.createElement('img');
+    face.src = randomImage();
+    face.classList.add('face');
+    hole.appendChild(face);
+    gameContainer.appendChild(hole);
+
+    let showing = false;
+
+    function toggleFace() {
+      if (!gameActive) return;
+
+      showing = Math.random() > 0.5;
+      face.src = randomImage();
+      face.classList.toggle('show', showing);
+    }
+
+    setInterval(toggleFace, 1000 + Math.random() * 800);
+
+    hole.addEventListener('click', () => {
+      if (gameActive && showing) {
+        score++;
+        face.classList.remove('show');
+        showing = false;
+        scoreDisplay.textContent = `السكور: ${score}`;
+      }
+    });
+  }
+
+  for (let i = 0; i < 9; i++) {
+    createHole();
+  }
+
+  const countdown = setInterval(() => {
+    if (timeLeft > 0) {
+      timeLeft--;
+      timerDisplay.textContent = `الوقت: ${timeLeft}`;
+    } else {
+      clearInterval(countdown);
+      endGame();
+    }
+  }, 1000);
+
+  function endGame() {
+    gameActive = false;
+    endScreen.innerHTML = `🎉 خلصت اللعبة! جبت ${score} نقطة 🎉<br><br>انتي مش بس شاطرة في اللعب... انتي شاطرة في خطف القلوب كمان 😍`;
+    endScreen.style.display = 'block';
+  }
+</script>
+
+</body>
+</html>
